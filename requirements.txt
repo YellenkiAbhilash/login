@@ -1,0 +1,6 @@
+Flask
+Flask-Mail
+SQLAlchemy
+python-dotenv
+itsdangerous
+werkzeug
