@@ -8,13 +8,25 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# Check for required environment variables
+required_env_vars = ['SECRET_KEY', 'MAIL_SERVER', 'MAIL_PORT', 'MAIL_USERNAME', 'MAIL_PASSWORD']
+missing = [var for var in required_env_vars if not os.getenv(var)]
+if missing:
+    raise RuntimeError(f"Missing required environment variables: {', '.join(missing)}")
+
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY')
 
 # Email Configuration
+MAIL_PORT = os.getenv('MAIL_PORT')
+try:
+    MAIL_PORT = int(MAIL_PORT)
+except (TypeError, ValueError):
+    raise RuntimeError("MAIL_PORT environment variable must be an integer")
+
 app.config.update(
     MAIL_SERVER=os.getenv('MAIL_SERVER'),
-    MAIL_PORT=int(os.getenv('MAIL_PORT')),
+    MAIL_PORT=MAIL_PORT,
     MAIL_USERNAME=os.getenv('MAIL_USERNAME'),
     MAIL_PASSWORD=os.getenv('MAIL_PASSWORD'),
     MAIL_USE_TLS=True,
@@ -93,3 +105,7 @@ def reset_password(token):
         return redirect(url_for('login'))
 
     return render_template('reset_password.html')
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
