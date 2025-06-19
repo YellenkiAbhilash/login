@@ -1,6 +1,7 @@
 Flask
 Flask-Mail
 SQLAlchemy
+flask_sqlalchemy
 python-dotenv
 itsdangerous
 werkzeug
