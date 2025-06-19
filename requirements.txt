@@ -5,3 +5,4 @@ flask_sqlalchemy
 python-dotenv
 itsdangerous
 werkzeug
+pymysql

@@ -31,7 +31,7 @@ app.config.update(
     MAIL_PASSWORD=os.getenv('MAIL_PASSWORD'),
     MAIL_USE_TLS=True,
     MAIL_USE_SSL=False,
-    SQLALCHEMY_DATABASE_URI='sqlite:///users.db',
+    SQLALCHEMY_DATABASE_URI='mysql+pymysql://root:mysql@localhost/flaskapp',
     SQLALCHEMY_TRACK_MODIFICATIONS=False
 )
 
@@ -54,6 +54,7 @@ def login_post():
     user = User.query.filter_by(email=email).first()
     if user and check_password_hash(user.password, password):
         flash("Logged in successfully!", "success")
+        return redirect(url_for('welcome'))
     else:
         flash("Invalid credentials", "danger")
     return redirect(url_for('login'))
@@ -105,6 +106,10 @@ def reset_password(token):
         return redirect(url_for('login'))
 
     return render_template('reset_password.html')
+
+@app.route('/welcome')
+def welcome():
+    return render_template('welcome.html')
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
